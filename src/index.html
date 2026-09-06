@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>SpeakiRPG Gear Enhancement Simulator</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha256-SERKgtTty1vsDxll+qzd4Y2cF9swY9BCq62i9wXJ9Uo=" crossorigin="anonymous"></script>
+</head>
+<body>
+	<header>
+		<h1>SpeakiRPG Gear Enhancement Simulator</h1>
+	</header>
+
+	<main>
+		<form id="form-params">
+			<div>
+				<label for="level-from">開始時の強化段階</label>
+				<input type="number" id="level-from" name="level-from" min="0" value="0" />
+			</div>
+
+			<div>
+				<label for="level-to">目標の強化段階</label>
+				<input type="number" id="level-to" name="level-to" min="0" value="10" />
+			</div>
+
+			<div>
+				<fieldset>
+					<legend>装備の種類</legend>
+
+					<div>
+						<input type="radio" id="gear-type-weapon" name="gear-type" value="weapon" checked />
+						<label for="gear-type-weapon">武器</label>
+					</div>
+
+					<div>
+						<input type="radio" id="gear-type-armor" name="gear-type" value="armor" />
+						<label for="gear-type-armor">防具</label>
+					</div>
+				</fieldset>
+			</div>
+
+			<div>
+				<label for="max-gold">最大消費ゴールド</label>
+				<input type="number" id="max-gold" name="max-gold" min="0" value="1000000" />
+			</div>
+
+			<div>
+				<button type="button" id="button-calculate">計算</button>
+			</div>
+		</form>
+	</main>
+
+	<div>
+		<canvas id="cdf-chart"></canvas>
+	</div>
+
+	<script type="module" src="./scripts/index.js"></script>
+</body>
+</html>

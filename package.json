@@ -1,0 +1,14 @@
+{
+  "name": "speakirpg-gear-enhancement",
+  "private": "true",
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "test": "vitest --run"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "chart.js": "^4.5.1",
+    "vitest": "^5.0.0"
+  }
+}

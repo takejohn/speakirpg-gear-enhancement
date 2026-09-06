@@ -74,38 +74,6 @@ export class Table {
 		this.#data[index] = newValue;
 	}
 
-	toString() {
-		let result = '[';
-		const rows = this.rows;
-		if (rows > 0) {
-			result += this.#rowToString(0);
-			for (let i = 1 ; i < rows ; i++) {
-				result += ',';
-				result += this.#rowToString(i);
-			}
-		}
-		result += ']';
-		return result;
-	}
-
-	/**
-	 * @param {number} row
-	 * @returns {string}
-	 */
-	#rowToString(row) {
-		let result = '[';
-		const columns = this.#columns;
-		if (columns > 0) {
-			result += this.get(row, 0);
-			for (let i = 1 ; i < columns ; i++) {
-				result += ',';
-				result += this.get(row, i);
-			}
-		}
-		result += ']';
-		return result;
-	}
-
 	/**
 	 * @param {number} row
 	 * @param {number} column 

@@ -82,22 +82,6 @@ class State {
 		}
 		return result;
 	}
-
-	sum() {
-		let result = 0.0;
-		const levelTo = this.levelTo;
-		const maxCost = this.maxCost;
-		for (let cost = 0 ; cost <= maxCost ; cost++) {
-			for (let level = 0 ; level <= levelTo ; level++) {
-				result += this.get(cost, level);
-			}
-		}
-		return result;
-	}
-
-	toString() {
-		return `State { maxCost: ${this.maxCost}, levelTo: ${this.levelTo}, table: ${this.#table} }`
-	}
 }
 
 /**
@@ -138,7 +122,6 @@ export function* calculateCDFIter(levelFrom, levelTo, maxCost) {
 
 	for (let cost = 1 ; cost <= maxCost ; cost++) {
 		transition(state, probabilities, cost);
-		console.log(`cost = ${cost}, state.sum() = ${state.sum()}`);
 		yield state.levelSum(levelTo);
 	}
 }

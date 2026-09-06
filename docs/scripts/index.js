@@ -10,6 +10,7 @@ const buttonCalculate = /** @type {HTMLButtonElement} */ (document.getElementByI
 const formParams = /** @type {HTMLFormElement} */ (document.getElementById('form-params'));
 const cdfChart = /** @type {HTMLCanvasElement} */ (document.getElementById('cdf-chart'));
 const tbodyPercentiles = /** @type {HTMLTableSectionElement} */ (document.getElementById('tbody-percentiles'));
+const pStatus = /** @type {HTMLParagraphElement} */ (document.getElementById('p-status'));
 
 /** @type {Worker | null} */
 let worker = null;
@@ -75,6 +76,7 @@ function updateChart() {
 		maxCost,
 	};
 	worker.postMessage(simulationParams);
+	pStatus.textContent = '計算中……';
 
 	let done = false;
 	worker.addEventListener('message', (ev) => {
@@ -85,6 +87,7 @@ function updateChart() {
 		const data = ev.data;
 		done = data.done;
 		if (data.done) {
+			pStatus.textContent = '計算完了';
 			return;
 		}
 		const { cost, probability } = data.data;

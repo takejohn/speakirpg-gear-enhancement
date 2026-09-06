@@ -9,12 +9,15 @@ import { getUnitGold } from './cost.js';
 const buttonCalculate = /** @type {HTMLButtonElement} */ (document.getElementById('button-calculate'));
 const formParams = /** @type {HTMLFormElement} */ (document.getElementById('form-params'));
 const cdfChart = /** @type {HTMLCanvasElement} */ (document.getElementById('cdf-chart'));
+const tbodyPercentiles = /** @type {HTMLTableSectionElement} */ (document.getElementById('tbody-percentiles'));
 
 /** @type {Worker | null} */
 let worker = null;
 
 /** @type {Chart | null} */
 let chart = null;
+
+const percentiles = [50, 75, 90, 95, 99];
 
 function updateChart() {
 	const params = processParams(new FormData(formParams));
@@ -62,6 +65,9 @@ function updateChart() {
 		},
 	);
 
+	clearPercentileTable();
+	let reachedPercentile = Number.NEGATIVE_INFINITY;
+
 	/** @type {SimulationParams} */
 	const simulationParams = {
 		levelFrom: params.levelFrom,
@@ -82,8 +88,19 @@ function updateChart() {
 			return;
 		}
 		const { cost, probability } = data.data;
-		/** @type {number[]} */ (chart.data.labels).push(cost * unitGold);
-		chart.data.datasets[0].data.push(probability * 100); // 百分率に変換
+		const gold = cost * unitGold;
+		const probabilityPercent = probability * 100;
+
+		/** @type {number[]} */ (chart.data.labels).push(gold);
+		chart.data.datasets[0].data.push(probabilityPercent);
+
+		for (const [i, percentile] of percentiles.entries()) {
+			if (reachedPercentile >= percentile || probabilityPercent < percentile) {
+				continue;
+			}
+			reachedPercentile = percentile;
+			appendPercentileTableRow(percentile, gold);
+		}
 	});
 
 	worker.addEventListener('error', (ev) => {
@@ -120,6 +137,28 @@ function processParams(formData) {
 	}
 
 	return params;
+}
+
+function clearPercentileTable() {
+	tbodyPercentiles.innerHTML = '';
+}
+
+/**
+ * @param {number} percentile
+ * @param {number} gold
+ */
+function appendPercentileTableRow(percentile, gold) {
+	const row = document.createElement('tr');
+
+	const percentileCell = document.createElement('td');
+	percentileCell.textContent = `${percentile}%`;
+	row.appendChild(percentileCell);
+
+	const goldCell = document.createElement('td');
+	goldCell.textContent = `${gold.toLocaleString()} G`;
+	row.appendChild(goldCell);
+
+	tbodyPercentiles.appendChild(row);
 }
 
 buttonCalculate.addEventListener('click', () => {

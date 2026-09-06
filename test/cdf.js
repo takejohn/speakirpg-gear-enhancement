@@ -38,8 +38,4 @@ describe('calculateCDF', () => {
 			{ cost: 2, probability: 0.80 },
 		]);
 	});
-
-	test('attempt twice from 1', () => {
-		const result = calculateCDF(1, 2, )
-	})
 });

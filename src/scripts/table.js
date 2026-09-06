@@ -61,6 +61,19 @@ export class Table {
 		this.#data[this.#toIndex(row, column)] = value;
 	}
 
+	/**
+	 * @param {number} row
+	 * @param {number} column
+	 * @param {(oldValue: number) => number} func
+	 * @returns {void}
+	 */
+	update(row, column, func) {
+		const index = this.#toIndex(row, column);
+		const oldValue = this.#data[index];
+		const newValue = func(oldValue);
+		this.#data[index] = newValue;
+	}
+
 	toString() {
 		let result = '[';
 		const rows = this.rows;

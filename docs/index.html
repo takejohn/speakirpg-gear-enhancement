@@ -10,108 +10,107 @@
 <body>
 	<header>
 		<h1>SpeakiRPG Gear Enhancement Simulator</h1>
+
+		<label for="select-lang">Language / 언어 / 言語</label>
+		<select id="select-lang" name="lang">
+			<option value="en">English</option>
+			<option value="kr">한국어</option>
+			<option value="ja" selected>日本語</option>
+		</select>
 	</header>
 
 	<main>
-		<form id="form-params">
-			<div>
-				<label for="level-from">開始時の強化段階</label>
-				<input type="number" id="level-from" name="level-from" min="0" value="0" />
-			</div>
+		<section>
+			<h2 data-i18n="simulation_settings"></h2>
+			<form id="form-params">
+				<div>
+					<label for="level-from" data-i18n="level_from"></label>
+					<input type="number" id="level-from" name="level-from" min="0" value="0" />
+				</div>
 
-			<div>
-				<label for="level-to">目標の強化段階</label>
-				<input type="number" id="level-to" name="level-to" min="0" value="15" />
-			</div>
+				<div>
+					<label for="level-to" data-i18n="level_to"></label>
+					<input type="number" id="level-to" name="level-to" min="0" value="15" />
+				</div>
 
-			<div>
-				<fieldset>
-					<legend>装備の種類</legend>
+				<div>
+					<fieldset>
+						<legend data-i18n="gear_type"></legend>
 
-					<div>
-						<input type="radio" id="gear-type-weapon" name="gear-type" value="weapon" checked />
-						<label for="gear-type-weapon">武器</label>
-					</div>
+						<div>
+							<input type="radio" id="gear-type-weapon" name="gear-type" value="weapon" checked />
+							<label for="gear-type-weapon" data-i18n="weapon"></label>
+						</div>
 
-					<div>
-						<input type="radio" id="gear-type-armor" name="gear-type" value="armor" />
-						<label for="gear-type-armor">防具</label>
-					</div>
-				</fieldset>
-			</div>
+						<div>
+							<input type="radio" id="gear-type-armor" name="gear-type" value="armor" />
+							<label for="gear-type-armor" data-i18n="armor"></label>
+						</div>
+					</fieldset>
+				</div>
 
-			<div>
-				<label for="max-gold">最大消費ゴールド</label>
-				<input type="number" id="max-gold" name="max-gold" min="0" value="20000000" />
-			</div>
+				<div>
+					<label for="max-gold" data-i18n="max_gold"></label>
+					<input type="number" id="max-gold" name="max-gold" min="0" value="20000000" />
+				</div>
 
-			<div>
-				<button type="button" id="button-calculate">計算</button>
-			</div>
-		</form>
+				<div>
+					<button type="button" id="button-calculate" data-i18n="calculate"></button>
+				</div>
+			</form>
+		</section>
+
+		<p id="p-status"></p>
+
+		<section>
+			<h2 data-i18n="level_reaching_probability"></h2>
+			<canvas id="cdf-chart"></canvas>
+		</section>
+
+		<section>
+			<h2 data-i18n="level_reaching_percentile"></h2>
+			<table>
+				<thead>
+					<tr>
+						<th data-i18n="reaching_probability"></th>
+						<th data-i18n="required_gold"></th>
+					</tr>
+				</thead>
+				<tbody id="tbody-percentiles">
+				</tbody>
+			</table>
+		</section>
+
+		<section>
+			<h2 data-i18n="about_upgrade_probabilities_heading"></h2>
+			<p data-i18n="about_upgrade_probabilities_1"></p>
+			<p data-i18n="about_upgrade_probabilities_2"></p>
+			<pre>
+				S = Math.round(88 * Math.pow(0.91, n - 1))
+				if (n == 1) {
+					K = 100 - S
+					D = 0
+				} else {
+					F = 100 - S
+					K = Math.round(F * 0.55)
+					D = F - K
+				}
+			</pre>
+			<p data-i18n="about_upgrade_probabilities_3"></p>
+		</section>
+
+		<section>
+			<h2 data-i18n="about_spent_gold_heading"></h2>
+			<p data-i18n="about_spent_gold_1"></p>
+		</section>
 	</main>
 
-	<p id="p-status"></p>
-
-	<section>
-		<h2>目標段階到達確率</h2>
-		<canvas id="cdf-chart"></canvas>
-	</section>
-
-	<section>
-		<h2>目標段階到達パーセンタイル</h2>
-		<table>
-			<thead>
-				<tr>
-					<th>到達確率</th>
-					<th>必要ゴールド</th>
-				</tr>
-			</thead>
-			<tbody id="tbody-percentiles">
-			</tbody>
-		</table>
-	</section>
-
-	<section>
-		<h2>強化の成否確率について</h2>
-		<p>
-			装備強化における成功・維持・下降確率について、どのような計算に基づいて算出されているのかは公開されていません。
-		</p>
-		<p>
-			そのため、このツールでは推測された数式により確率の計算を行います。
-			+(n - 1) から +n への強化の成功確率 <code>S</code>、維持確率 <code>K</code>、下降確率 <code>D</code>
-			は以下のように算出します。
-		</p>
-		<pre>
-			S = Math.round(88 * Math.pow(0.91, n - 1))
-			if (n == 1) {
-				K = 100 - S
-				D = 0
-			} else {
-				F = 100 - S
-				K = Math.round(F * 0.55)
-				D = F - K
-			}
-		</pre>
-		<p>
-			この計算方法は、少なくとも n が 19 以下のとき、正しい値を求められることが確認されています。
-		</p>
-	</section>
-
-	<section>
-		<h2>消費ゴールドについて</h2>
-		<p>
-			強化時の消費ゴールドは、武器は 3000 &times; (強化レベル)&nbsp;G、
-			防具は 1500 &times; (強化レベル)&nbsp;G として計算します。
-		</p>
-	</section>
-
 	<footer>
-		<a href="https://github.com/takejohn/speakirpg-gear-enhancement">ソース</a>
+		<a href="https://github.com/takejohn/speakirpg-gear-enhancement" data-i18n="source">ソース</a>
 		|
-		<a href="https://speakirpg.overture.io.kr/">スピキ育成</a>
+		<a href="https://speakirpg.overture.io.kr/" data-i18n="speakirpg">スピキ育成</a>
 	</footer>
 
-	<script type="module" src="./scripts/index.js"></script>
+	<script type="module" src="./scripts/index.js" defer></script>
 </body>
 </html>

@@ -3,20 +3,26 @@
 /// <reference path="../../global.d.ts" />
 
 import { getUnitGold } from './cost.js';
+import { translate, validateLanguage } from './translations.js';
 /** @import { GearType, FormParams, SimulationParams, ResultPoint } from '../types/simulation.js'; */
 /** @import { Chart } from 'chart.js' */
+/** @import { Language } from '../types/translations.js' */
 
 const buttonCalculate = /** @type {HTMLButtonElement} */ (document.getElementById('button-calculate'));
 const formParams = /** @type {HTMLFormElement} */ (document.getElementById('form-params'));
 const cdfChart = /** @type {HTMLCanvasElement} */ (document.getElementById('cdf-chart'));
 const tbodyPercentiles = /** @type {HTMLTableSectionElement} */ (document.getElementById('tbody-percentiles'));
 const pStatus = /** @type {HTMLParagraphElement} */ (document.getElementById('p-status'));
+const selectLang = /** @type {HTMLSelectElement} */ (document.getElementById('select-lang'));
 
 /** @type {Worker | null} */
 let worker = null;
 
 /** @type {Chart | null} */
 let chart = null;
+
+/** @type {Language} */
+let lang = validateLanguage(selectLang.value);
 
 const percentiles = [50, 75, 90, 95, 99];
 
@@ -59,12 +65,12 @@ function updateChart() {
 						type: 'linear',
 						min: 0,
 						max: params.maxGold,
-						title: { display: true, text: '消費ゴールド' },
+						title: { display: true, text: autoTranslate('spent_gold') },
 					},
 					y: {
 						min: 0,
 						max: 100,
-						title: { display: true, text: '到達確率' },
+						title: { display: true, text: autoTranslate('reaching_probability') },
 					},
 				}
 			},
@@ -81,7 +87,7 @@ function updateChart() {
 		maxCost,
 	};
 	worker.postMessage(simulationParams);
-	pStatus.textContent = '計算中……';
+	pStatus.textContent = autoTranslate('calculating');
 
 	let done = false;
 	worker.addEventListener('message', (ev) => {
@@ -92,7 +98,7 @@ function updateChart() {
 		const data = ev.data;
 		done = data.done;
 		if (data.done) {
-			pStatus.textContent = '計算完了';
+			pStatus.textContent = autoTranslate('calculated');
 			return;
 		}
 		const { cost, probability } = data.data;
@@ -140,17 +146,17 @@ function processParams(formData) {
 	}
 
 	if (params.levelFrom < 0 || params.levelTo < 0 || !Number.isSafeInteger(params.levelFrom) || !Number.isSafeInteger(params.levelTo)) {
-		window.alert('強化段階は0以上の整数である必要があります');
+		window.alert(autoTranslate('error_level_negative_or_not_integer'));
 		return;
 	}
 
 	if (params.maxGold < 0 || !Number.isSafeInteger(params.maxGold)) {
-		window.alert('最大消費ゴールドは0以上の整数である必要があります');
+		window.alert(autoTranslate('error_gold_negative_or_not_integer'));
 		return;
 	}
 
 	if (params.levelTo <= params.levelFrom) {
-		window.alert('目標の強化段階は開始時の強化段階より大きい必要があります');
+		window.alert(autoTranslate('error_level_to_not_more_than_level_from'));
 		return;
 	}
 
@@ -179,6 +185,33 @@ function appendPercentileTableRow(percentile, gold) {
 	tbodyPercentiles.appendChild(row);
 }
 
+function updateLanguage() {
+	lang = validateLanguage(selectLang.value);
+	document.documentElement.lang = lang;
+	const elements = document.querySelectorAll('[data-i18n]')
+	elements.forEach((el) => {
+		const key = el.getAttribute('data-i18n');
+		if (key != null) {
+			el.textContent = translate(key, lang);
+		}
+	});
+}
+
+/**
+ * @param {string} key
+ * @returns {string}
+ * @throws key が存在しないキーである場合は TypeError。 
+ */
+function autoTranslate(key) {
+	return translate(key, lang);
+}
+
 buttonCalculate.addEventListener('click', () => {
 	updateChart();
 });
+
+selectLang.addEventListener('change', () => {
+	updateLanguage();
+});
+
+updateLanguage();

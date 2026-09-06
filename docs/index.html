@@ -51,12 +51,12 @@
 		</form>
 	</main>
 
-	<div>
+	<section>
 		<h2>目標段階到達確率</h2>
 		<canvas id="cdf-chart"></canvas>
-	</div>
+	</section>
 
-	<div>
+	<section>
 		<h2>目標段階到達パーセンタイル</h2>
 		<table>
 			<thead>
@@ -68,7 +68,33 @@
 			<tbody id="tbody-percentiles">
 			</tbody>
 		</table>
-	</div>
+	</section>
+
+	<section>
+		<h2>強化の成否確率について</h2>
+		<p>
+			装備強化における成功・維持・下降確率について、どのような計算に基づいて算出されているのかは公開されていません。
+		</p>
+		<p>
+			そのため、このツールでは推測された数式により確率の計算を行います。
+			+(n - 1) から +n への強化の成功確率 <code>S</code>、維持確率 <code>K</code>、下降確率 <code>D</code>
+			は以下のように算出します。
+		</p>
+		<pre>
+			S = Math.round(88 * Math.pow(0.91, n - 1))
+			if (n == 1) {
+				K = 100 - S
+				D = 0
+			} else {
+				F = 100 - S
+				K = Math.round(F * 0.55)
+				D = F - K
+			}
+		</pre>
+		<p>
+			この計算方法は、少なくとも n が 19 以下のとき、正しい値を求められることが確認されています。
+		</p>
+	</section>
 
 	<script type="module" src="./scripts/index.js"></script>
 </body>

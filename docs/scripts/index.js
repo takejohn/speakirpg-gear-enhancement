@@ -155,7 +155,7 @@ function appendPercentileTableRow(percentile, gold) {
 	row.appendChild(percentileCell);
 
 	const goldCell = document.createElement('td');
-	goldCell.textContent = `${gold.toLocaleString()} G`;
+	goldCell.textContent = `${gold.toLocaleString()}\xA0G`;
 	row.appendChild(goldCell);
 
 	tbodyPercentiles.appendChild(row);

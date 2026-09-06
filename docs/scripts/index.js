@@ -131,6 +131,16 @@ function processParams(formData) {
 		maxGold: Number(formData.get('max-gold')),
 	}
 
+	if (params.levelFrom < 0 || params.levelTo < 0 || !Number.isSafeInteger(params.levelFrom) || !Number.isSafeInteger(params.levelTo)) {
+		window.alert('強化段階は0以上の整数である必要があります');
+		return;
+	}
+
+	if (params.maxGold < 0 || !Number.isSafeInteger(params.maxGold)) {
+		window.alert('最大消費ゴールドは0以上の整数である必要があります');
+		return;
+	}
+
 	if (params.levelTo <= params.levelFrom) {
 		window.alert('目標の強化段階は開始時の強化段階より大きい必要があります');
 		return;

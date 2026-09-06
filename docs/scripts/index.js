@@ -58,9 +58,14 @@ function updateChart() {
 					x: {
 						type: 'linear',
 						min: 0,
-						max: params.maxGold
+						max: params.maxGold,
+						title: { display: true, text: '消費ゴールド' },
 					},
-					y: { min: 0, max: 100 },
+					y: {
+						min: 0,
+						max: 100,
+						title: { display: true, text: '到達確率' },
+					},
 				}
 			},
 		},

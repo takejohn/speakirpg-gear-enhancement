@@ -1,6 +1,6 @@
 // @ts-check
 
-/** @import { Language, TranslationKey, Translations } from '../types/translations.js' */
+/** @import { Language, Translations } from '../types/translations.js' */
 
 /** @type {Translations} */
 export const translations = {
@@ -17,9 +17,9 @@ export const translations = {
 		level_reaching_percentile: 'Target level reaching percentiles',
 		reaching_probability: 'Probability of reaching',
 		required_gold: 'Required gold',
-		about_upgrade_probabilities_heading: 'About enhancement success, maintenance, and downgrade probabilities',
-		about_upgrade_probabilities_1: 'It has not been disclosed how the success, maintenance, and downgrade probabilities for gear enhancement are calculated.',
-		about_upgrade_probabilities_2: 'Therefore, this tool calculates the probabilities using inferred formulas. The success probability S, maintenance probability K, and downgrade probability D for enhancing from +(n - 1) to +n are calculated as follows.',
+		about_upgrade_probabilities_heading: 'About enhancement success, keep, and drop probabilities',
+		about_upgrade_probabilities_1: 'It has not been disclosed how the success, keep, and drop probabilities for gear enhancement are calculated.',
+		about_upgrade_probabilities_2: 'Therefore, this tool calculates the probabilities using inferred formulas. The success probability S, keep probability K, and drop probability D for enhancing from +(n - 1) to +n are calculated as follows.',
 		about_upgrade_probabilities_3: 'This calculation method has been confirmed to produce the correct values, at least when n is 19 or lower.',
 		about_spent_gold_heading: 'About gold costs',
 		about_spent_gold_1: 'The gold cost for each enhancement is calculated as 3000 × (enhancement level) G for weapons and 1500 × (enhancement level) G for armor.',

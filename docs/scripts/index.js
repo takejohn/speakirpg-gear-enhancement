@@ -65,12 +65,12 @@ function updateChart() {
 						type: 'linear',
 						min: 0,
 						max: params.maxGold,
-						title: { display: true, text: autoTranslate('spent_gold') },
+						title: { display: true, text: autoTranslate('spent_gold') + ' (G)' },
 					},
 					y: {
 						min: 0,
 						max: 100,
-						title: { display: true, text: autoTranslate('reaching_probability') },
+						title: { display: true, text: autoTranslate('reaching_probability') + ' (%)' },
 					},
 				}
 			},

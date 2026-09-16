@@ -145,8 +145,8 @@ function processParams(formData) {
 		maxGold: Number(formData.get('max-gold')),
 	}
 
-	if (params.levelFrom < 0 || params.levelTo < 0 || !Number.isSafeInteger(params.levelFrom) || !Number.isSafeInteger(params.levelTo)) {
-		window.alert(autoTranslate('error_level_negative_or_not_integer'));
+	if (params.levelFrom < 0 || params.levelTo < 0 || params.levelTo > 20 || params.levelTo > 20) {
+		window.alert(autoTranslate('error_invalid_level'));
 		return;
 	}
 

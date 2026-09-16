@@ -1,5 +1,5 @@
 import { describe } from 'vitest';
-import { calculateCDF } from '../src/scripts/cdf.js';
+import { calculateCDF } from '../docs/scripts/cdf.js';
 import { expect, test } from 'vitest';
 
 describe('calculateCDF', () => {

@@ -1,6 +1,6 @@
 // @ts-check
 
-import { ProbabilityCalculator } from './probabilities.js';
+import { getProbabilities } from './probabilities.js';
 import { Table } from './table.js';
 
 class State {
@@ -112,8 +112,6 @@ export function calculateCDF(levelFrom, levelTo, maxCost) {
  * @returns {Generator<number, void, unknown>}
  */
 export function* calculateCDFIter(levelFrom, levelTo, maxCost) {
-	const probabilities = new ProbabilityCalculator();
-
 	let state = new State(maxCost, levelTo);
 
 	// 消費コスト0のときは1の確率で開始時のレベル
@@ -121,7 +119,7 @@ export function* calculateCDFIter(levelFrom, levelTo, maxCost) {
 	yield state.levelSum(levelTo);
 
 	for (let cost = 1 ; cost <= maxCost ; cost++) {
-		transition(state, probabilities, cost);
+		transition(state, cost);
 		yield state.levelSum(levelTo);
 	}
 }
@@ -130,10 +128,9 @@ export function* calculateCDFIter(levelFrom, levelTo, maxCost) {
  * 消費可能コストを追加した状態に更新する。
  * ただし、レベルが levelTo に到達した後はこれ以上強化段階が変化しないものとする。
  * @param {State} state
- * @param {ProbabilityCalculator} probabilities
  * @param {number} currentCost
  */
-function transition(state, probabilities, currentCost) {
+function transition(state, currentCost) {
 	const levelTo = state.levelTo;
 
 	for (let level = 0 ; level < levelTo ; level++) {
@@ -142,7 +139,7 @@ function transition(state, probabilities, currentCost) {
 		if (prevCost < 0) {
 			continue;
 		}
-		const upgradeProbabilities = probabilities.forLevel(nextLevel);
+		const upgradeProbabilities = getProbabilities(nextLevel);
 		const prevProbability = state.get(prevCost, level);
 		state.set(prevCost, level, 0);
 		// 成功確率
